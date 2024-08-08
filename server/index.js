@@ -87,11 +87,11 @@ io.on('connection', (socket) => {
         if (roomId) {
             socket.join(roomId);
             console.log(`User joined room: ${roomId}`);
-            
+
             // Fetch participants based on challengeId or inviteCode
             const challenge = await ChallengeDetailsModel.findOne({ $or: [{ _id: challengeId }, { inviteCode }] });
             if (challenge) {
-                const participantDetails = await UserDetailsModel.find({ '_id': { $in: challenge.participants }}, 'username');
+                const participantDetails = await UserDetailsModel.find({ '_id': { $in: challenge.participants } }, 'username');
                 console.log(`Fetched participants for room ${roomId}:`, participantDetails.map(p => p.username));
                 io.to(roomId).emit('updateParticipants', participantDetails.map(p => p.username));
             } else {
@@ -106,7 +106,6 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 });
-
 
 
 
